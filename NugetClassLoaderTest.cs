@@ -3,6 +3,8 @@ using System;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
+
+    // TODO : RM ME
 	[TestFixture ()]
 	public class NugetClassLoaderTest
 	{

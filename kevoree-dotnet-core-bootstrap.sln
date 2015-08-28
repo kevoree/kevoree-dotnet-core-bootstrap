@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-core-bootstrap", "kevoree-dotnet-core-bootstrap.csproj", "{650B3B9C-6F33-4B1D-BD21-7A6900490A41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-core", "..\kevoree-dotnet-core\kevoree-dotnet-core.csproj", "{561D5BD5-99D5-424F-B658-F1BD43489397}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "..\kevoree-dotnet-core-api\Api.csproj", "{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-core-microkernel", "..\kevoree-dotnet-core-microkernel\kevoree-dotnet-core-microkernel.csproj", "{8968B571-F40A-45DF-B1DC-983E48D81993}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annotation", "..\kevoree-dotnet-annotation\Annotation.csproj", "{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{650B3B9C-6F33-4B1D-BD21-7A6900490A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650B3B9C-6F33-4B1D-BD21-7A6900490A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{650B3B9C-6F33-4B1D-BD21-7A6900490A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561D5BD5-99D5-424F-B658-F1BD43489397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561D5BD5-99D5-424F-B658-F1BD43489397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561D5BD5-99D5-424F-B658-F1BD43489397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561D5BD5-99D5-424F-B658-F1BD43489397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8968B571-F40A-45DF-B1DC-983E48D81993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8968B571-F40A-45DF-B1DC-983E48D81993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8968B571-F40A-45DF-B1DC-983E48D81993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8968B571-F40A-45DF-B1DC-983E48D81993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
