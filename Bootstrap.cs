@@ -1,5 +1,4 @@
 ﻿using java.io;
-using Mono.Options;
 using org.kevoree;
 using org.kevoree.modeling.api.compare;
 using org.kevoree.modeling.api.json;
@@ -22,14 +21,19 @@ namespace Org.Kevoree.Core.Bootstrap
         public KevoreeCLKernel kernel;
         
 
-        public Bootstrap(KevoreeKernel k, string nodeName)
+        public Bootstrap(KevoreeKernel k, string nodeName, string kevoreeRegistryUrl, string nugetLocalRepositoryPath, string nugetRepositoryUrl)
         {
             //xmiLoader = core.getFactory().createXMILoader();
             this.microkernel = k;
-            this.kernel = new KevoreeCLKernel(this);
+            this.kernel = new KevoreeCLKernel(this, nodeName, nugetLocalRepositoryPath, nugetRepositoryUrl);
+
+
+            /* WARNING : Really hacky*/
+            java.lang.System.setProperty("kevoree.registry", kevoreeRegistryUrl);
+
             //this.injector = new KevoreeInjector();
             this.core.setNodeName(nodeName);
-            this.kernel.setNodeName(nodeName);
+            //this.kernel.setNodeName(nodeName);
             this.kernel.setCore(this.core);
             core.setBootstrapService(kernel);
             this.core.start();
@@ -37,64 +41,39 @@ namespace Org.Kevoree.Core.Bootstrap
 
         static void Main(string[] args)
         {
-            string nodeName = "node0";
-            string scriptPath = null;
-            bool showHelp = false;
+            var options = new CommandLineOptions();
 
-            var optionSet = new OptionSet()
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-                { "node.name=", "the main node name (default: node0)", n => nodeName = n },
-                { "node.script=", "init script path", p => scriptPath = p },
-                { "h|help=", "displays help message", v => showHelp = true }
-            };
 
-            try
-            {
-                optionSet.Parse(args);
-            }
-            catch (OptionException e)
-            {
-                System.Console.Write("kevoree-dotnet: ");
-                System.Console.WriteLine(e.Message);
-                System.Console.WriteLine("Try `kevoree-dotnet --help' for more information.");
-                return;
-            }
-
-            if (showHelp)
-            {
-                ShowHelp(optionSet);
-                return;
-            }
-
-            // Below this comment command line parameters a checked and validated.
-
-
-            try {
-                var boot = new Bootstrap(KevoreeKernel.Self.Value, nodeName);
-                if (scriptPath == null)
+                try
                 {
-                    /*
-                     * A default model is loaded.
-                     * It is composed of a WSGroup and a Dotnet Node, attached together.
-                     * The Dotnet Node name is "nodeName".
-                     * The WSGroup listen on port 9000.
-                     */
-                    string defaultKevScript = String.Format(@"add {0} : JavaNode
+                    var boot = new Bootstrap(KevoreeKernel.Self.Value, options.NodeName, options.KevoreeRegistryUrl, options.NugetLocalRepositoryPath, options.NugetRepositoryUrl);
+                    if (options.ScriptPath == null)
+                    {
+                        /*
+                         * A default model is loaded.
+                         * It is composed of a WSGroup and a Dotnet Node, attached together.
+                         * The Dotnet Node name is "nodeName".
+                         * The WSGroup listen on port 9000.
+                         */
+                        string defaultKevScript = String.Format(@"add {0} : DotnetNode
                                                             add sync : WSGroup
-                                                            attach {0} sync", nodeName);
-                    boot.loadKevScript(defaultKevScript, (x) =>  System.Console.WriteLine("Bootstrap completed") );
+                                                            attach {0} sync", options.NodeName);
+                        boot.loadKevScript(defaultKevScript, (x) => System.Console.WriteLine("Bootstrap completed"));
+                    }
+                    else
+                    {
+                        /*
+                         * We try to load scriptPath file and guess it's content by extention (.json for a json model or .kev for a kev script model).
+                         */
+                        boot.loadScript(options.ScriptPath);
+                    }
                 }
-                else
+                catch (System.Exception e)
                 {
-                    /*
-                     * We try to load scriptPath file and guess it's content by extention (.json for a json model or .kev for a kev script model).
-                     */
-                    boot.loadScript(scriptPath);
+                    System.Console.WriteLine(e.ToString());
                 }
-            }
-            catch (System.Exception e)
-            {
-                System.Console.WriteLine(e.ToString());
             }
         }
 
@@ -157,13 +136,6 @@ namespace Org.Kevoree.Core.Bootstrap
         {
             ContainerRoot emptyModel = this.core.getFactory().createContainerRoot();
             return emptyModel;
-        }
-
-        private static void ShowHelp(OptionSet optionSet)
-        {
-            System.Console.WriteLine("Usage: kevoree-dotnet [OPTIONS]+");
-            System.Console.WriteLine("Options:");
-            optionSet.WriteOptionDescriptions(System.Console.Out);
         }
     }
 }

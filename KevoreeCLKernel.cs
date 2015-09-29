@@ -5,25 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Org.Kevoree.NugetLoader;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     public class KevoreeCLKernel : BootstrapService
     {
         private Bootstrap bootstrap;
-        private string nodeName;
+        private readonly string nodeName;
+        private readonly string nugetLocalRepositoryPath;
+        private readonly string nugetRepositoryUrl;
         private KevoreeCoreBean core;
 
-        public KevoreeCLKernel(Bootstrap bootstrap)
+        public KevoreeCLKernel(Bootstrap bootstrap, string nodeName, string nugetLocalRepositoryPath, string nugetRepositoryUrl)
         {
-            // TODO: Complete member initialization
             this.bootstrap = bootstrap;
+            this.nodeName = nodeName;
+            this.nugetLocalRepositoryPath = nugetLocalRepositoryPath;
+            this.nugetRepositoryUrl = nugetRepositoryUrl;
         }
 
-        public void setNodeName(string nodeName)
-        {
-            this.nodeName = nodeName;
-        }
 
         public void setCore(KevoreeCoreBean core)
         {
@@ -92,11 +93,14 @@ namespace Org.Kevoree.Core.Bootstrap
 
         public IRunner createInstance(ContainerNode nodeInstance)
         {
-            
             var typedef = nodeInstance.getTypeDefinition();
-            var name = typedef.getName();
-            var version = typedef.getVersion();
-            return ComponentLoader.loadComponent(name, version);
+            // FIXME : look badly complex for just a DU look (we are looking for the DU of dotnet).
+            var deployUnitDotNet = ((org.kevoree.impl.DeployUnitImpl)typedef.getDeployUnits().toArray().Where(x => ((org.kevoree.impl.DeployUnitImpl)x).findFiltersByID("platform").getValue() == "dotnet").First());
+            var name = deployUnitDotNet.getName();
+            var version = deployUnitDotNet.getVersion();
+            // TODO définir où charger le chemin vers le repo local et l'url du repository nuget distant.
+            var componentloaded = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<Runner>(name, version, nugetRepositoryUrl);
+            return componentloaded;
         }
 
         private bool internalInjectField(string fieldName, string value, object target)
@@ -105,7 +109,7 @@ namespace Org.Kevoree.Core.Bootstrap
             {
                 try
                 {
-                    bool isSet = false;
+                    //bool isSet = false;
                     String setterName = "set";
                     setterName = setterName + fieldName.Substring(0, 1).ToUpper();
                     if (fieldName.Count() > 1)
