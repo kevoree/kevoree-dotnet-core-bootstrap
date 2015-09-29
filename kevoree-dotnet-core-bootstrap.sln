@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annotation", "..\kevoree-do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-nuget-loader", "..\kevoree-dotnet-nuget-loader\kevoree-dotnet-nuget-loader.csproj", "{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-lib-annotation", "..\kevoree-dotnet-lib-annotation\kevoree-dotnet-lib-annotation.csproj", "{2ECA1361-D670-4755-BD91-FE7651F0826F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

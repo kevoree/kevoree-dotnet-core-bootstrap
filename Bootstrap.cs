@@ -1,11 +1,8 @@
 ﻿using java.io;
 using org.kevoree;
-using org.kevoree.modeling.api.compare;
 using org.kevoree.modeling.api.json;
-using org.kevoree.modeling.api.xmi;
 using Org.Kevoree.Core.Api;
 using System;
-using Org.Kevoree.Core;
 using org.kevoree.kevscript;
 using System.Text;
 using Org.Kevoree.Core.Microkernel;
@@ -19,7 +16,7 @@ namespace Org.Kevoree.Core.Bootstrap
         private KevScriptEngine kevScriptEngine = new KevScriptEngine();
         private KevoreeKernel microkernel;
         public KevoreeCLKernel kernel;
-        
+
 
         public Bootstrap(KevoreeKernel k, string nodeName, string kevoreeRegistryUrl, string nugetLocalRepositoryPath, string nugetRepositoryUrl)
         {
@@ -91,7 +88,7 @@ namespace Org.Kevoree.Core.Bootstrap
             {
                 //System.Console.WriteLine(e.getMessage());
                 throw new System.Exception(e.getMessage());
-                    
+
             }
 
             ContainerNode currentNode = emptyModel.findNodesByID(core.getNodeName());

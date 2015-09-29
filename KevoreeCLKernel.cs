@@ -1,11 +1,7 @@
 ﻿using org.kevoree;
 using Org.Kevoree.Core.Api;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using Org.Kevoree.NugetLoader;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -91,16 +87,17 @@ namespace Org.Kevoree.Core.Bootstrap
             }
         }
 
-        public IRunner createInstance(ContainerNode nodeInstance)
+        /**
+         * DEVNOTE : on pose comme prédicat que cette méthode est dédiée à la création d'instance de NODE et rien d'autre
+         */
+        public INodeRunner createInstance(ContainerNode nodeInstance)
         {
             var typedef = nodeInstance.getTypeDefinition();
             // FIXME : look badly complex for just a DU look (we are looking for the DU of dotnet).
             var deployUnitDotNet = ((org.kevoree.impl.DeployUnitImpl)typedef.getDeployUnits().toArray().Where(x => ((org.kevoree.impl.DeployUnitImpl)x).findFiltersByID("platform").getValue() == "dotnet").First());
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
-            // TODO définir où charger le chemin vers le repo local et l'url du repository nuget distant.
-            var componentloaded = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<Runner>(name, version, nugetRepositoryUrl);
-            return componentloaded;
+            return new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, nugetRepositoryUrl);
         }
 
         private bool internalInjectField(string fieldName, string value, object target)

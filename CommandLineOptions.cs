@@ -1,19 +1,14 @@
 ﻿using CommandLine;
 using CommandLine.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     class CommandLineOptions
     {
-        [Option('n', "node.name", Required=false, DefaultValue="node0", HelpText="Dotnet main node name")]
+        [Option('n', "node.name", Required = false, DefaultValue = "node0", HelpText = "Dotnet main node name")]
         public string NodeName { get; set; }
 
-        [Option('p', "sript.path", Required=false, HelpText="path to a startup model (json or kvm script)")]
+        [Option('p', "sript.path", Required = false, HelpText = "path to a startup model (json or kvm script)")]
         public string ScriptPath { get; set; }
 
         [Option("nuget.local.repository.path", Required = false, HelpText = "Nuget local repository.")]
