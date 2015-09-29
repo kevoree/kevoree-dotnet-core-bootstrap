@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
-    public class KevoreeCLKernel : BootstrapService
+    public class KevoreeCLKernel : MarshalByRefObject, BootstrapService
     {
         private Bootstrap bootstrap;
         private readonly string nodeName;
@@ -97,7 +97,13 @@ namespace Org.Kevoree.Core.Bootstrap
             var deployUnitDotNet = ((org.kevoree.impl.DeployUnitImpl)typedef.getDeployUnits().toArray().Where(x => ((org.kevoree.impl.DeployUnitImpl)x).findFiltersByID("platform").getValue() == "dotnet").First());
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
-            return new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, nugetRepositoryUrl);
+            var instance = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, nugetRepositoryUrl);
+            // TODO : ici injecter les @KevoreeInject dans l'instance
+            //var coreProxy = new ContextAwareModelServiceCoreProxy();
+            instance.proceedInject(nodeInstance.path(), nodeName, nodeInstance.getName(), core);
+
+
+            return instance;
         }
 
         private bool internalInjectField(string fieldName, string value, object target)
@@ -245,7 +251,7 @@ namespace Org.Kevoree.Core.Bootstrap
                     }*/
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //Log.error("No field corresponding to annotation, consistency error {} on {}", e, fieldName, target.getClass().getName());
                     return false;

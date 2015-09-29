@@ -161,6 +161,9 @@
   <ItemGroup>
     <Compile Include="Bootstrap.cs" />
     <Compile Include="CommandLineOptions.cs" />
+    <Compile Include="ContextAwareAdapter.cs" />
+    <Compile Include="ContextAwareModelServiceCoreProxy.cs" />
+    <Compile Include="InstanceContext.cs" />
     <Compile Include="KevoreeCLKernel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodeRunner.cs" />
@@ -190,6 +193,10 @@
     <ProjectReference Include="..\kevoree-dotnet-core\kevoree-dotnet-core.csproj">
       <Project>{561d5bd5-99d5-424f-b658-f1bd43489397}</Project>
       <Name>kevoree-dotnet-core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\kevoree-dotnet-lib-annotation\kevoree-dotnet-lib-annotation.csproj">
+      <Project>{2eca1361-d670-4755-bd91-fe7651f0826f}</Project>
+      <Name>kevoree-dotnet-lib-annotation</Name>
     </ProjectReference>
     <ProjectReference Include="..\kevoree-dotnet-nuget-loader\kevoree-dotnet-nuget-loader.csproj">
       <Project>{f30aecdb-2e1b-404d-b51c-12edc2d6398c}</Project>

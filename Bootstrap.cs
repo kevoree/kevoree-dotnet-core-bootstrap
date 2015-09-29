@@ -1,11 +1,11 @@
 ﻿using java.io;
 using org.kevoree;
+using org.kevoree.kevscript;
 using org.kevoree.modeling.api.json;
 using Org.Kevoree.Core.Api;
-using System;
-using org.kevoree.kevscript;
-using System.Text;
 using Org.Kevoree.Core.Microkernel;
+using System;
+using System.Text;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -28,7 +28,6 @@ namespace Org.Kevoree.Core.Bootstrap
             /* WARNING : Really hacky*/
             java.lang.System.setProperty("kevoree.registry", kevoreeRegistryUrl);
 
-            //this.injector = new KevoreeInjector();
             this.core.setNodeName(nodeName);
             //this.kernel.setNodeName(nodeName);
             this.kernel.setCore(this.core);
