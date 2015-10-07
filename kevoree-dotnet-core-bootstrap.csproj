@@ -162,7 +162,6 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="ContextAwareAdapter.cs" />
-    <Compile Include="ContextAwareModelServiceCoreProxy.cs" />
     <Compile Include="InstanceContext.cs" />
     <Compile Include="KevoreeCLKernel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,6 +6,7 @@ using System.Linq;
 using Org.Kevoree.Annotation;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Api.Adaptation;
+using Org.Kevoree.Core.Api.Command;
 using Org.Kevoree.Core.Api.IMarshalled;
 using Org.Kevoree.Library.Annotation;
 using NodeType = Org.Kevoree.Core.Api.NodeType;
@@ -15,9 +16,9 @@ namespace Org.Kevoree.Core.Bootstrap
     public class NodeRunner : MarshalByRefObject, INodeRunner
     {
         private readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
+        private readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
-        private readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
         private DeployUnit node;
         private string pluginPath;
 
@@ -32,7 +33,7 @@ namespace Org.Kevoree.Core.Bootstrap
             return ((NodeType) node).plan(current, target, sequence);
         }
 
-        public PrimitiveCommand getPrimitive(AdaptationPrimitive primitive)
+        public ICommand getPrimitive(AdaptationPrimitive primitive)
         {
             return ((NodeType) node).getPrimitive(primitive);
         }

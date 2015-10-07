@@ -1,30 +1,27 @@
-﻿using org.kevoree;
-using Org.Kevoree.Core.Api;
-using System;
+﻿using System;
 using System.Linq;
+using org.kevoree;
+using org.kevoree.impl;
+using Org.Kevoree.Core.Api;
+using Boolean = java.lang.Boolean;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     public class KevoreeCLKernel : MarshalByRefObject, BootstrapService
     {
-        private Bootstrap bootstrap;
         private readonly string nodeName;
         private readonly string nugetLocalRepositoryPath;
         private readonly string nugetRepositoryUrl;
+        private Bootstrap bootstrap;
         private KevoreeCoreBean core;
 
-        public KevoreeCLKernel(Bootstrap bootstrap, string nodeName, string nugetLocalRepositoryPath, string nugetRepositoryUrl)
+        public KevoreeCLKernel(Bootstrap bootstrap, string nodeName, string nugetLocalRepositoryPath,
+            string nugetRepositoryUrl)
         {
             this.bootstrap = bootstrap;
             this.nodeName = nodeName;
             this.nugetLocalRepositoryPath = nugetLocalRepositoryPath;
             this.nugetRepositoryUrl = nugetRepositoryUrl;
-        }
-
-
-        public void setCore(KevoreeCoreBean core)
-        {
-            this.core = core;
         }
 
         public void injectDictionary(Instance instance, IRunner target, bool defaultOnly)
@@ -36,15 +33,15 @@ namespace Org.Kevoree.Core.Bootstrap
             var attrs = instance.getTypeDefinition().getDictionaryType().getAttributes().iterator();
             while (attrs.hasNext())
             {
-                DictionaryAttribute att = (DictionaryAttribute)attrs.next();
+                var att = (DictionaryAttribute) attrs.next();
                 string defValue = null;
                 string value = null;
-                if (java.lang.Boolean.TRUE.equals(att.getFragmentDependant()))
+                if (Boolean.TRUE.equals(att.getFragmentDependant()))
                 {
-                    FragmentDictionary fdico = instance.findFragmentDictionaryByID(nodeName);
+                    var fdico = instance.findFragmentDictionaryByID(nodeName);
                     if (fdico != null)
                     {
-                        Value tempValue = fdico.findValuesByID(att.getName());
+                        var tempValue = fdico.findValuesByID(att.getName());
                         if (tempValue != null)
                         {
                             value = tempValue.getValue();
@@ -55,7 +52,7 @@ namespace Org.Kevoree.Core.Bootstrap
                 {
                     if (instance.getDictionary() != null)
                     {
-                        Value tempValue = instance.getDictionary().findValuesByID(att.getName());
+                        var tempValue = instance.getDictionary().findValuesByID(att.getName());
                         if (tempValue != null)
                         {
                             value = tempValue.getValue();
@@ -90,14 +87,21 @@ namespace Org.Kevoree.Core.Bootstrap
         /**
          * DEVNOTE : on pose comme prédicat que cette méthode est dédiée à la création d'instance de NODE et rien d'autre
          */
+
         public INodeRunner createInstance(ContainerNode nodeInstance)
         {
             var typedef = nodeInstance.getTypeDefinition();
             // FIXME : look badly complex for just a DU look (we are looking for the DU of dotnet).
-            var deployUnitDotNet = ((org.kevoree.impl.DeployUnitImpl)typedef.getDeployUnits().toArray().Where(x => ((org.kevoree.impl.DeployUnitImpl)x).findFiltersByID("platform").getValue() == "dotnet").First());
+            var deployUnitDotNet =
+                ((DeployUnitImpl)
+                    typedef.getDeployUnits()
+                        .toArray()
+                        .Where(x => ((DeployUnitImpl) x).findFiltersByID("platform").getValue() == "dotnet")
+                        .First());
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
-            var instance = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, nugetRepositoryUrl);
+            var instance = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(
+                name, version, nugetRepositoryUrl);
             // TODO : ici injecter les @KevoreeInject dans l'instance
             //var coreProxy = new ContextAwareModelServiceCoreProxy();
             instance.proceedInject(nodeInstance.path(), nodeName, nodeInstance.getName(), core);
@@ -106,14 +110,20 @@ namespace Org.Kevoree.Core.Bootstrap
             return instance;
         }
 
+
+        public void setCore(KevoreeCoreBean core)
+        {
+            this.core = core;
+        }
+
         private bool internalInjectField(string fieldName, string value, object target)
         {
-            if (value != null/* && !value.equals("")*/)
+            if (value != null /* && !value.equals("")*/)
             {
                 try
                 {
                     //bool isSet = false;
-                    String setterName = "set";
+                    var setterName = "set";
                     setterName = setterName + fieldName.Substring(0, 1).ToUpper();
                     if (fieldName.Count() > 1)
                     {
@@ -257,12 +267,7 @@ namespace Org.Kevoree.Core.Bootstrap
                     return false;
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
-
-
     }
 }

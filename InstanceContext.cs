@@ -2,11 +2,11 @@
 
 namespace Org.Kevoree.Core.Bootstrap
 {
-    class InstanceContext : Context
+    internal class InstanceContext : Context
     {
-        private readonly string path;
-        private readonly string nodeName;
         private readonly string instanceName;
+        private readonly string nodeName;
+        private readonly string path;
 
         public InstanceContext(string path, string nodeName, string instanceName)
         {
@@ -15,10 +15,19 @@ namespace Org.Kevoree.Core.Bootstrap
             this.instanceName = instanceName;
         }
 
-        public string getPath() { return this.path; }
+        public string getPath()
+        {
+            return path;
+        }
 
-        public string getNodeName() { return this.nodeName; }
+        public string getNodeName()
+        {
+            return nodeName;
+        }
 
-        public string getInstanceName() { return this.instanceName; }
+        public string getInstanceName()
+        {
+            return instanceName;
+        }
     }
 }

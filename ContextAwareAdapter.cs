@@ -1,24 +1,20 @@
-﻿using org.kevoree;
-using org.kevoree.modeling.api.trace;
+﻿using System;
+using org.kevoree;
+using org.kevoree.pmodeling.api.trace;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Api.Handler;
-using Org.Kevoree.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
-    class ContextAwareAdapter: Org.Kevoree.Core.Api.ModelService
+    internal class ContextAwareAdapter : ModelService
     {
-        private ContextAwareModelService service;
-        private string caller;
+        private readonly string caller;
+        private readonly ContextAwareModelService service;
 
         public ContextAwareAdapter(ContextAwareModelService core, string path)
         {
-            this.service = core;
-            this.caller = path;
+            service = core;
+            caller = path;
         }
 
         public UUIDModel getCurrentModel()
@@ -67,12 +63,12 @@ namespace Org.Kevoree.Core.Bootstrap
         }
 
 
-        public void submitScript(string script, Org.Kevoree.Core.Api.UpdateCallback callback)
+        public void submitScript(string script, UpdateCallback callback)
         {
             service.submitScript(script, callback, caller);
         }
 
-        public void submitSequence(org.kevoree.pmodeling.api.trace.TraceSequence sequence, UpdateCallback callback)
+        public void submitSequence(TraceSequence sequence, UpdateCallback callback)
         {
             service.submitSequence(sequence, callback, caller);
         }
