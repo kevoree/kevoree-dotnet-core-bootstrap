@@ -100,14 +100,21 @@ namespace Org.Kevoree.Core.Bootstrap
                         .First());
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
-            var instance = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(
-                name, version, nugetRepositoryUrl);
+            var instance = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, nugetRepositoryUrl);
             // TODO : ici injecter les @KevoreeInject dans l'instance
             //var coreProxy = new ContextAwareModelServiceCoreProxy();
             instance.proceedInject(nodeInstance.path(), nodeName, nodeInstance.getName(), core);
 
 
             return instance;
+        }
+
+        public IComponentRunner LoadSomething(string name, string version, string path)
+        {
+            var ret = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<ComponentRunner>(
+                name, version, nugetRepositoryUrl);
+            ret.ProceedInject(path, nodeName, name, core);
+            return ret;
         }
 
 
