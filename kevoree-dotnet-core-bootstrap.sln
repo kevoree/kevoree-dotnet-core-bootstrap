@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-nuget-loader
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-lib-annotation", "..\kevoree-dotnet-lib-annotation\kevoree-dotnet-lib-annotation.csproj", "{2ECA1361-D670-4755-BD91-FE7651F0826F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-group-remotews", "..\kevoree-dotnet-group-remotews\kevoree-dotnet-group-remotews.csproj", "{49A04B49-0202-49E3-AED5-78927E277697}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "kevoree-dotnet-node", "..\kevoree-dotnet-node\kevoree-dotnet-node.fsproj", "{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A04B49-0202-49E3-AED5-78927E277697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A04B49-0202-49E3-AED5-78927E277697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A04B49-0202-49E3-AED5-78927E277697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A04B49-0202-49E3-AED5-78927E277697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

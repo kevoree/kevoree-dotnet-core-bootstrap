@@ -5,6 +5,7 @@ using org.kevoree;
 using org.kevoree.kevscript;
 using org.kevoree.modeling.api.json;
 using Org.Kevoree.Core.Api;
+using Org.Kevoree.Core.Marshalled;
 using Org.Kevoree.Core.Microkernel;
 using Console = System.Console;
 using Parser = CommandLine.Parser;
@@ -56,9 +57,17 @@ namespace Org.Kevoree.Core.Bootstrap
                          * The Dotnet Node name is "nodeName".
                          * The WSGroup listen on port 9000.
                          */
-                        var defaultKevScript = string.Format(@"add {0} : DotnetNode
+                       /* var defaultKevScript = string.Format(@"add {0} : DotnetNode
                                                             add sync : WSGroup
-                                                            attach {0} sync", options.NodeName);
+                                                            attach {0} sync", options.NodeName);*/
+
+                        var defaultKevScript = string.Format(@"add {0} : DotnetNode
+add sync : RemoteWSGroup
+
+attach {0} sync
+
+set sync.host = 'ws.kevoree.org'
+set sync.path = '/test'", options.NodeName);
                         boot.loadKevScript(defaultKevScript, x => Console.WriteLine("Bootstrap completed"));
                     }
                     else
@@ -96,7 +105,7 @@ namespace Org.Kevoree.Core.Bootstrap
 
             // TODO : is it really necessary to deal with network issues here ?
 
-            core.update(emptyModel, callback, "/");
+            core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
 
             //System.Console.WriteLine("Done");
         }
@@ -126,7 +135,7 @@ namespace Org.Kevoree.Core.Bootstrap
             core.getFactory().root(emptyModel);
             var compare = core.getFactory().createModelCompare();
             compare.merge(emptyModel, model).applyOn(emptyModel);
-            core.update(emptyModel, callback, "/");
+            core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
         }
 
         private ContainerRoot initialModel()

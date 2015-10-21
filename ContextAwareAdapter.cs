@@ -3,6 +3,8 @@ using org.kevoree;
 using org.kevoree.pmodeling.api.trace;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Api.Handler;
+using Org.Kevoree.Core.Marshalled;
+using Org.Kevoree.Core.Api.IMarshalled;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -22,17 +24,17 @@ namespace Org.Kevoree.Core.Bootstrap
             return service.getCurrentModel();
         }
 
-        public ContainerRoot getPendingModel()
+        public IContainerRootMarshalled getPendingModel()
         {
             return service.getPendingModel();
         }
 
-        public void compareAndSwap(ContainerRoot model, Guid uuid, UpdateCallback callback)
+        public void compareAndSwap(IContainerRootMarshalled model, Guid uuid, UpdateCallback callback)
         {
             service.compareAndSwap(model, uuid, callback, caller);
         }
 
-        public void update(ContainerRoot model, UpdateCallback callback)
+        public void update(IContainerRootMarshalled model, UpdateCallback callback)
         {
             service.update(model, callback, caller);
         }

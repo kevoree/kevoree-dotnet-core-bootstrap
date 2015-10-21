@@ -17,6 +17,7 @@ namespace Org.Kevoree.Core.Bootstrap
     {
         private readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
         private readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
+        private readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
         private DeployUnit component;
@@ -27,20 +28,8 @@ namespace Org.Kevoree.Core.Bootstrap
             this.pluginPath = pluginPath;
         }
 
-        /*public AdaptationModel plan(IContainerRootMarshalled current, IContainerRootMarshalled target,
-            ITracesSequence sequence)
-        {
-            return ((NodeType) component).plan(current, target, sequence);
-        }*/
-
-        /*public ICommand getPrimitive(AdaptationPrimitive primitive)
-        {
-            return ((NodeType) component).getPrimitive(primitive);
-        }*/
-
         private void Start()
         {
-            //this.Init();
             var startMethod = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof (Start)).First();
             startMethod.Invoke(component, null);
         }
@@ -70,12 +59,25 @@ namespace Org.Kevoree.Core.Bootstrap
             return true;
         }
 
+        public bool Stop()
+        {
+            var startMethod = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof(Stop)).First();
+            startMethod.Invoke(component, null);
+            return true;
+        }
+
         internal void ProceedInject(string path, string nodeName, string name, KevoreeCoreBean core)
         {
             Init();
             injector.inject<Context>(component, new InstanceContext(path, nodeName, name));
             injector.inject<ModelService>(component, new ContextAwareAdapter(core, path));
             injector.inject(component, core.getBootstrapService());
+        }
+
+        public bool updateDictionary(IDictionaryAttributeMarshalled attribute, IValueMarshalled value)
+        {
+            injectorParams.smartInject<Param>(component, attribute.getName(), attribute.getDatatype(), value.getValue());
+            return true;
         }
     }
 }

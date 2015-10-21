@@ -164,6 +164,7 @@
     <Compile Include="ContextAwareAdapter.cs" />
     <Compile Include="InstanceContext.cs" />
     <Compile Include="KevoreeCLKernel.cs" />
+    <Compile Include="ComponentRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodeRunner.cs" />
   </ItemGroup>
