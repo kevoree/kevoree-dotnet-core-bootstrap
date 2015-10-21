@@ -9,6 +9,7 @@ using Org.Kevoree.Core.Marshalled;
 using Org.Kevoree.Core.Microkernel;
 using Console = System.Console;
 using Parser = CommandLine.Parser;
+using Org.Kevoree.Log.Api;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -22,7 +23,7 @@ namespace Org.Kevoree.Core.Bootstrap
 
 
         public Bootstrap(KevoreeKernel k, string nodeName, string kevoreeRegistryUrl, string nugetLocalRepositoryPath,
-            string nugetRepositoryUrl)
+            string nugetRepositoryUrl, Level logLevel)
         {
             //xmiLoader = core.getFactory().createXMILoader();
             microkernel = k;
@@ -33,7 +34,7 @@ namespace Org.Kevoree.Core.Bootstrap
             java.lang.System.setProperty("kevoree.registry", kevoreeRegistryUrl);
 
             core.setNodeName(nodeName);
-            //this.kernel.setNodeName(nodeName);
+            core.initLog(logLevel);
             kernel.setCore(core);
             core.setBootstrapService(kernel);
             core.start();
@@ -48,7 +49,7 @@ namespace Org.Kevoree.Core.Bootstrap
                 try
                 {
                     var boot = new Bootstrap(KevoreeKernel.Self.Value, options.NodeName, options.KevoreeRegistryUrl,
-                        options.NugetLocalRepositoryPath, options.NugetRepositoryUrl);
+                        options.NugetLocalRepositoryPath, options.NugetRepositoryUrl, options.LogLevel);
                     if (options.ScriptPath == null)
                     {
                         /*

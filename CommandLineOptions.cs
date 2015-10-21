@@ -1,5 +1,7 @@
-﻿using CommandLine;
+﻿using com.sun.org.apache.xerces.@internal.impl.xs.identity;
+using CommandLine;
 using CommandLine.Text;
+using NUnit.Framework;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -21,6 +23,9 @@ namespace Org.Kevoree.Core.Bootstrap
         [Option("kevoree.registry.url", DefaultValue = "http://registry.kevoree.org", Required = false,
             HelpText = "Kevoree remote registry.")]
         public string KevoreeRegistryUrl { get; set; }
+
+        [Option("kevoree.log.level", DefaultValue = Org.Kevoree.Log.Api.Level.INFO, Required = false, HelpText = "Instance log level.")]
+        public Org.Kevoree.Log.Api.Level LogLevel { get; set; }
 
         [ParserState]
         public IParserState LastParserState { get; set; }

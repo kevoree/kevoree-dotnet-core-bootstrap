@@ -10,6 +10,7 @@ using Org.Kevoree.Core.Api.Command;
 using Org.Kevoree.Core.Api.IMarshalled;
 using Org.Kevoree.Library.Annotation;
 using NodeType = Org.Kevoree.Core.Api.NodeType;
+using Org.Kevoree.Log.Api;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -71,6 +72,7 @@ namespace Org.Kevoree.Core.Bootstrap
             Init();
             injector.inject<Context>(component, new InstanceContext(path, nodeName, name));
             injector.inject<ModelService>(component, new ContextAwareAdapter(core, path));
+            injector.inject<ILogger>(component, core.getLogger().getInstance(nodeName, name));
             injector.inject(component, core.getBootstrapService());
         }
 
