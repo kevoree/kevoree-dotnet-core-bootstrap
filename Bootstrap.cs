@@ -15,8 +15,7 @@ namespace Org.Kevoree.Core.Bootstrap
 {
     public class Bootstrap
     {
-        private static readonly JSONModelLoader jsonLoader;
-        private readonly KevoreeCoreBean core = new KevoreeCoreBean();
+        private static readonly KevoreeCoreBean core = new KevoreeCoreBean();
         public KevoreeCLKernel kernel;
         private readonly KevScriptEngine kevScriptEngine = new KevScriptEngine();
         private KevoreeKernel microkernel;
@@ -49,7 +48,7 @@ namespace Org.Kevoree.Core.Bootstrap
                 try
                 {
                     var boot = new Bootstrap(KevoreeKernel.Self.Value, options.NodeName, options.KevoreeRegistryUrl,
-                        options.NugetLocalRepositoryPath, options.NugetRepositoryUrl, options.LogLevel);
+                        options.NugetLocalRepositoryPath, options.NugetRepositoryUrl, Level.Debug);
                     if (options.ScriptPath == null)
                     {
                         /*
@@ -69,7 +68,7 @@ attach {0} sync
 
 set sync.host = 'ws.kevoree.org'
 set sync.path = '/test'", options.NodeName);
-                        boot.loadKevScript(defaultKevScript, x => Console.WriteLine("Bootstrap completed"));
+                        boot.LoadKevScript(defaultKevScript, x => core.getLogger().Warn("Bootstrap completed"));
                     }
                     else
                     {
@@ -81,24 +80,23 @@ set sync.path = '/test'", options.NodeName);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.ToString());
+                    core.getLogger().Error(e.ToString());
                 }
             }
         }
 
-        private void loadKevScript(string defaultKevScript, UpdateCallback callback)
+        private void LoadKevScript(string defaultKevScript, UpdateCallback callback)
         {
             var emptyModel = initialModel();
             core.getFactory().root(emptyModel);
             InputStream input = new ByteArrayInputStream(Encoding.Unicode.GetBytes(defaultKevScript.ToCharArray()));
-            Console.WriteLine(defaultKevScript);
+            core.getLogger().Debug(defaultKevScript);
             try
             {
                 kevScriptEngine.execute(defaultKevScript, emptyModel);
             }
             catch (java.lang.Exception e)
             {
-                //System.Console.WriteLine(e.getMessage());
                 throw new Exception(e.getMessage());
             }
 
@@ -107,8 +105,6 @@ set sync.path = '/test'", options.NodeName);
             // TODO : is it really necessary to deal with network issues here ?
 
             core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
-
-            //System.Console.WriteLine("Done");
         }
 
         private void loadScript(string scriptPath)
@@ -116,12 +112,16 @@ set sync.path = '/test'", options.NodeName);
             if (scriptPath.EndsWith(".json"))
             {
                 // TODO : load a json model
+                var jsonLoader = core.getFactory().createJSONLoader();
                 var model = jsonLoader.loadModelFromStream(new FileInputStream(scriptPath)).get(0);
-                bootstrap((ContainerRoot)model, applied => Console.WriteLine(applied));
+                bootstrap((ContainerRoot)model, applied => core.getLogger().Warn(applied.ToString()));
             }
             else if (scriptPath.EndsWith(".kev"))
             {
-                // TODO : load a kev script
+
+                var content  = System.IO.File.ReadAllText(scriptPath);
+
+                this.LoadKevScript(content, x => core.getLogger().Warn("Bootstrap completed"));
             }
             else
             {

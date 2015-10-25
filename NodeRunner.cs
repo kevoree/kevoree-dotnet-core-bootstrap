@@ -22,6 +22,7 @@ namespace Org.Kevoree.Core.Bootstrap
         private DirectoryCatalog directoryCatalog;
         private DeployUnit node;
         private string pluginPath;
+        private readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
 
         public void setPluginPath(string pluginPath)
         {
@@ -72,6 +73,12 @@ namespace Org.Kevoree.Core.Bootstrap
             injector.inject<ModelService>(node, new ContextAwareAdapter(core, path));
             injector.inject<ILogger>(node, core.getLogger().getInstance(name));
             injector.inject(node, core.getBootstrapService());
+        }
+
+        public bool updateDictionary(IDictionaryAttributeMarshalled attribute, IValueMarshalled value)
+        {
+            injectorParams.smartInject<Param>(node, attribute.getName(), attribute.getDatatype(), value.getValue());
+            return true;
         }
     }
 }

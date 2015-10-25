@@ -19,6 +19,8 @@ namespace Org.Kevoree.Core.Bootstrap
         private readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
         private readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
         private readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
+        private readonly KevoreeInjector<Output> injectorOutputs = new KevoreeInjector<Output>();
+        private readonly KevoreeInjector<Input> injectorInputs = new KevoreeInjector<Input>();
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
         private DeployUnit component;
@@ -31,8 +33,12 @@ namespace Org.Kevoree.Core.Bootstrap
 
         private void Start()
         {
-            var startMethod = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof (Start)).First();
-            startMethod.Invoke(component, null);
+            var startsMethods = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof (Start));
+            if (startsMethods.Count() > 0)
+            {
+                var startMethod = startsMethods.First();
+                startMethod.Invoke(component, null);
+            }
         }
 
         private void Init()
@@ -80,6 +86,16 @@ namespace Org.Kevoree.Core.Bootstrap
         {
             injectorParams.smartInject<Param>(component, attribute.getName(), attribute.getDatatype(), value.getValue());
             return true;
+        }
+
+        public void attacheOutputPort(Port port, string fieldName)
+        {
+            injectorOutputs.injectByName(component, port, fieldName);
+        }
+
+        public void sendThroughInputPort(string value, string fieldName)
+        {
+            injectorInputs.callByName(component, fieldName, value);
         }
     }
 }
