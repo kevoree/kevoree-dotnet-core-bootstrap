@@ -16,14 +16,15 @@ namespace Org.Kevoree.Core.Bootstrap
 {
     public class ComponentRunner : MarshalByRefObject, IComponentRunner
     {
-        private readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
-        private readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
-        private readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
-        private readonly KevoreeInjector<Output> injectorOutputs = new KevoreeInjector<Output>();
-        private readonly KevoreeInjector<Input> injectorInputs = new KevoreeInjector<Input>();
+        protected readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
+        protected readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
+        protected readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
+        protected readonly KevoreeInjector<Output> injectorOutputs = new KevoreeInjector<Output>();
+        protected readonly KevoreeInjector<Input> injectorInputs = new KevoreeInjector<Input>();
+        protected readonly KevoreeInjector<Dispatch> injectorDispatchs = new KevoreeInjector<Dispatch>();
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
-        private DeployUnit component;
+        protected DeployUnit component;
         private string pluginPath;
 
         public void setPluginPath(string pluginPath)
@@ -88,14 +89,26 @@ namespace Org.Kevoree.Core.Bootstrap
             return true;
         }
 
-        public void attacheOutputPort(Port port, string fieldName)
+        public void attachOutputPort(Port port, string fieldName)
         {
             injectorOutputs.injectByName(component, port, fieldName);
         }
 
-        public void sendThroughInputPort(string value, string fieldName)
+        public void sendThroughInputPort(string fieldName, string value)
         {
             injectorInputs.callByName(component, fieldName, value);
+        }
+
+        public void dispatch(string payload, Callback callback)
+        {
+            // TODO appeler le channel en scannant sur une nouvele annotation @Dispatch qui désigne la méthode du channel utilisée pour dispatcher le message
+            injectorDispatchs.call(component, payload);
+        }
+
+        public void attachInputPort(Port port, string fieldName)
+        {
+            // component must be a channel
+            ((ChannelPort) component).addInputPort(port);
         }
     }
 }

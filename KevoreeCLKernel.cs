@@ -36,7 +36,7 @@ namespace Org.Kevoree.Core.Bootstrap
                 ((DeployUnitImpl)
                     typedef.getDeployUnits()
                         .toArray()
-                        .Where(x => ((DeployUnitImpl) x).findFiltersByID("platform").getValue() == "dotnet")
+                        .Where(x => ((DeployUnitImpl)x).findFiltersByID("platform").getValue() == "dotnet")
                         .First());
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
@@ -51,8 +51,8 @@ namespace Org.Kevoree.Core.Bootstrap
 
         public IComponentRunner LoadSomething(string name, string version, string path)
         {
-            var ret = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<ComponentRunner>(
-                name, version, nugetRepositoryUrl);
+            ComponentRunner ret = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<ComponentRunner>(
+                       name, version, nugetRepositoryUrl);
             ret.ProceedInject(path, nodeName, name, core);
             return ret;
         }

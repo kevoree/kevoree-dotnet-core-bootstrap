@@ -11,6 +11,7 @@ using Org.Kevoree.Core.Api.IMarshalled;
 using Org.Kevoree.Library.Annotation;
 using Org.Kevoree.Log.Api;
 using NodeType = Org.Kevoree.Core.Api.NodeType;
+using System.Collections.Generic;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -30,7 +31,7 @@ namespace Org.Kevoree.Core.Bootstrap
         }
 
         public AdaptationModel plan(IContainerRootMarshalled current, IContainerRootMarshalled target,
-            ITracesSequence sequence)
+            ITracesSequence sequence )
         {
             return ((NodeType) node).plan(current, target, sequence);
         }
