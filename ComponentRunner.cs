@@ -34,7 +34,7 @@ namespace Org.Kevoree.Core.Bootstrap
 
         private void Start()
         {
-            var startsMethods = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof (Start));
+            var startsMethods = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof(Start));
             if (startsMethods.Count() > 0)
             {
                 var startMethod = startsMethods.First();
@@ -49,7 +49,7 @@ namespace Org.Kevoree.Core.Bootstrap
             regBuilder.ForTypesDerivedFrom<DeployUnit>().Export<DeployUnit>();
 
             var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof (NodeRunner).Assembly, regBuilder));
+            catalog.Catalogs.Add(new AssemblyCatalog(typeof(NodeRunner).Assembly, regBuilder));
             directoryCatalog = new DirectoryCatalog(pluginPath, regBuilder);
             catalog.Catalogs.Add(directoryCatalog);
 
@@ -69,8 +69,12 @@ namespace Org.Kevoree.Core.Bootstrap
 
         public bool Stop()
         {
-            var startMethod = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof(Stop)).First();
-            startMethod.Invoke(component, null);
+            var startMethods = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof(Stop));
+            if (startMethods.Count() > 0)
+            {
+                var startMethod = startMethods.First();
+                startMethod.Invoke(component, null);
+            }
             return true;
         }
 
@@ -101,14 +105,18 @@ namespace Org.Kevoree.Core.Bootstrap
 
         public void dispatch(string payload, Callback callback)
         {
-            // TODO appeler le channel en scannant sur une nouvele annotation @Dispatch qui désigne la méthode du channel utilisée pour dispatcher le message
             injectorDispatchs.call(component, payload);
         }
 
-        public void attachInputPort(Port port, string fieldName)
+        public void attachInputPort(Port port)
         {
             // component must be a channel
-            ((ChannelPort) component).addInputPort(port);
+            ((ChannelPort)component).addInputPort(port);
+        }
+
+        public void detachInputPort(Port port)
+        {
+            ((ChannelPort)component).removeInputPort(port);
         }
     }
 }
