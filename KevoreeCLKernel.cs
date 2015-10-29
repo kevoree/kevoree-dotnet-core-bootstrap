@@ -3,6 +3,7 @@ using System.Linq;
 using org.kevoree;
 using org.kevoree.impl;
 using Org.Kevoree.Core.Api;
+using Org.Kevoree.Core.Api.IMarshalled;
 using Boolean = java.lang.Boolean;
 
 namespace Org.Kevoree.Core.Bootstrap
@@ -28,15 +29,14 @@ namespace Org.Kevoree.Core.Bootstrap
          * DEVNOTE : on pose comme prédicat que cette méthode est dédiée à la création d'instance de NODE et rien d'autre
          */
 
-        public INodeRunner createInstance(ContainerNode nodeInstance)
+        public INodeRunner createInstance(IContainerNodeMarshalled nodeInstance)
         {
             var typedef = nodeInstance.getTypeDefinition();
             // FIXME : look badly complex for just a DU look (we are looking for the DU of dotnet).
             var deployUnitDotNet =
-                ((DeployUnitImpl)
+                ((IDeployUnitMarshalled)
                     typedef.getDeployUnits()
-                        .toArray()
-                        .Where(x => ((DeployUnitImpl)x).findFiltersByID("platform").getValue() == "dotnet")
+                        .Where(x => x.findFiltersByID("platform").getValue() == "dotnet")
                         .First());
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
