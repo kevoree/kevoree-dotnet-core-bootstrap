@@ -114,9 +114,20 @@ namespace Org.Kevoree.Core.Bootstrap
             ((ChannelPort)component).addInputPort(port);
         }
 
+        public void attachRemoteInputPort(Port port)
+        {
+            // component must be a channel
+            ((ChannelPort)component).addRemoteInputPort(port);
+        }
+
         public void detachInputPort(Port port)
         {
             ((ChannelPort)component).removeInputPort(port);
+        }
+
+        public void detachRemoteInputPort(Port port)
+        {
+            ((ChannelPort)component).removeRemoteInputPort(port);
         }
     }
 }
