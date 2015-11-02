@@ -5,25 +5,7 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-core-bootstrap", "kevoree-dotnet-core-bootstrap.csproj", "{650B3B9C-6F33-4B1D-BD21-7A6900490A41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-core", "..\kevoree-dotnet-core\kevoree-dotnet-core.csproj", "{561D5BD5-99D5-424F-B658-F1BD43489397}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "..\kevoree-dotnet-core-api\Api.csproj", "{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-core-microkernel", "..\kevoree-dotnet-core-microkernel\kevoree-dotnet-core-microkernel.csproj", "{8968B571-F40A-45DF-B1DC-983E48D81993}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annotation", "..\kevoree-dotnet-annotation\Annotation.csproj", "{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-nuget-loader", "..\kevoree-dotnet-nuget-loader\kevoree-dotnet-nuget-loader.csproj", "{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-lib-annotation", "..\kevoree-dotnet-lib-annotation\kevoree-dotnet-lib-annotation.csproj", "{2ECA1361-D670-4755-BD91-FE7651F0826F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-group-remotews", "..\kevoree-dotnet-group-remotews\kevoree-dotnet-group-remotews.csproj", "{49A04B49-0202-49E3-AED5-78927E277697}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "kevoree-dotnet-node", "..\kevoree-dotnet-node\kevoree-dotnet-node.fsproj", "{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kevoree-dotnet-log-api", "..\kevoree-dotnet-log-api\kevoree-dotnet-log-api.csproj", "{5D6A3C3E-703A-4AF7-B8F2-8580F418AE50}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log", "..\kevoree-dotnet-log\Log.csproj", "{7442AB80-01D8-4E1A-A1F1-3B6C4F18AE0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,46 +17,10 @@ Global
 		{650B3B9C-6F33-4B1D-BD21-7A6900490A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650B3B9C-6F33-4B1D-BD21-7A6900490A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{650B3B9C-6F33-4B1D-BD21-7A6900490A41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{561D5BD5-99D5-424F-B658-F1BD43489397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{561D5BD5-99D5-424F-B658-F1BD43489397}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{561D5BD5-99D5-424F-B658-F1BD43489397}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{561D5BD5-99D5-424F-B658-F1BD43489397}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8968B571-F40A-45DF-B1DC-983E48D81993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8968B571-F40A-45DF-B1DC-983E48D81993}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8968B571-F40A-45DF-B1DC-983E48D81993}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8968B571-F40A-45DF-B1DC-983E48D81993}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD3C2F49-5C3B-46D3-A283-600FE11A0AA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F30AECDB-2E1B-404D-B51C-12EDC2D6398C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2ECA1361-D670-4755-BD91-FE7651F0826F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49A04B49-0202-49E3-AED5-78927E277697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49A04B49-0202-49E3-AED5-78927E277697}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49A04B49-0202-49E3-AED5-78927E277697}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49A04B49-0202-49E3-AED5-78927E277697}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB0F4BEA-65E6-4C2B-9A77-6F4E1AB77A23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D6A3C3E-703A-4AF7-B8F2-8580F418AE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D6A3C3E-703A-4AF7-B8F2-8580F418AE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D6A3C3E-703A-4AF7-B8F2-8580F418AE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D6A3C3E-703A-4AF7-B8F2-8580F418AE50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7442AB80-01D8-4E1A-A1F1-3B6C4F18AE0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7442AB80-01D8-4E1A-A1F1-3B6C4F18AE0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7442AB80-01D8-4E1A-A1F1-3B6C4F18AE0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7442AB80-01D8-4E1A-A1F1-3B6C4F18AE0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
