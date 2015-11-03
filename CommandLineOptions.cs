@@ -1,7 +1,5 @@
-﻿using com.sun.org.apache.xerces.@internal.impl.xs.identity;
-using CommandLine;
+﻿using CommandLine;
 using CommandLine.Text;
-using NUnit.Framework;
 using Org.Kevoree.Log.Api;
 
 namespace Org.Kevoree.Core.Bootstrap

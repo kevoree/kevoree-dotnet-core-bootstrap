@@ -3,7 +3,6 @@ using System.Text;
 using java.io;
 using org.kevoree;
 using org.kevoree.kevscript;
-using org.kevoree.modeling.api.json;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Marshalled;
 using Org.Kevoree.Core.Microkernel;
