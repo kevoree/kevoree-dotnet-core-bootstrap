@@ -12,6 +12,7 @@ using Org.Kevoree.Library.Annotation;
 using Org.Kevoree.Log.Api;
 using NodeType = Org.Kevoree.Core.Api.NodeType;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -19,15 +20,28 @@ namespace Org.Kevoree.Core.Bootstrap
     {
         private readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
         private readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
-        private CompositionContainer container;
-        private DirectoryCatalog directoryCatalog;
-        private DeployUnit node;
+        private CompositionContainer _container;
+        [ImportMany(typeof(Org.Kevoree.Annotation.DeployUnit))]
+        private HashSet<Org.Kevoree.Annotation.DeployUnit> exports;
         private string pluginPath;
+        private string packageName;
+        private string packageVersion;
         private readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
+        private DeployUnit node;
 
         public void setPluginPath(string pluginPath)
         {
             this.pluginPath = pluginPath;
+        }
+
+        public void setPackageName(string packageName)
+        {
+            this.packageName = packageName;
+        }
+
+        public void setPackageVersion(string packageVersion)
+        {
+            this.packageVersion = packageVersion;
         }
 
         public AdaptationModel plan(IContainerRootMarshalled current, IContainerRootMarshalled target,
@@ -50,21 +64,13 @@ namespace Org.Kevoree.Core.Bootstrap
 
         private void Init()
         {
-            // Use RegistrationBuilder to set up our MEF parts.
-            var regBuilder = new RegistrationBuilder();
-            regBuilder.ForTypesDerivedFrom<DeployUnit>().Export<DeployUnit>();
-
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof (NodeRunner).Assembly, regBuilder));
-            directoryCatalog = new DirectoryCatalog(pluginPath, regBuilder);
-            catalog.Catalogs.Add(directoryCatalog);
-
-            container = new CompositionContainer(catalog);
-            container.ComposeExportedValue(container);
-
-            // Get our exports available to the rest of Program.
-            var laliste = container.GetExportedValues<DeployUnit>();
-            node = laliste.First();
+            var targetPath = Path.Combine(this.pluginPath, packageName + "." + packageVersion);
+            var plugDir = new FileInfo(targetPath).Directory;
+            var catalogs = plugDir.GetDirectories("*", SearchOption.AllDirectories).Select(x => new DirectoryCatalog(x.FullName));
+            var directoryAggregate = new AggregateCatalog(catalogs);
+            _container = new CompositionContainer(directoryAggregate);
+            _container.ComposeParts(this);
+            this.node = exports.First();
         }
 
         public void proceedInject(string path, string nodeName, string name, KevoreeCoreBean core)

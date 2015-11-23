@@ -11,25 +11,43 @@ using Org.Kevoree.Core.Api.IMarshalled;
 using Org.Kevoree.Library.Annotation;
 using NodeType = Org.Kevoree.Core.Api.NodeType;
 using Org.Kevoree.Log.Api;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     public class ComponentRunner : MarshalByRefObject, IComponentRunner
     {
+
         protected readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
         protected readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
         protected readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
         protected readonly KevoreeInjector<Output> injectorOutputs = new KevoreeInjector<Output>();
         protected readonly KevoreeInjector<Input> injectorInputs = new KevoreeInjector<Input>();
         protected readonly KevoreeInjector<Dispatch> injectorDispatchs = new KevoreeInjector<Dispatch>();
-        private CompositionContainer container;
-        private DirectoryCatalog directoryCatalog;
-        protected DeployUnit component;
+        private CompositionContainer _container;
+        private DeployUnit component;
+
+        [ImportMany(typeof(Org.Kevoree.Annotation.DeployUnit))]
+        private HashSet<Org.Kevoree.Annotation.DeployUnit> exports;
+
         private string pluginPath;
+        private string packageName;
+        private string packageVersion;
 
         public void setPluginPath(string pluginPath)
         {
             this.pluginPath = pluginPath;
+        }
+
+        public void setPackageName(string packageName)
+        {
+            this.packageName = packageName;
+        }
+
+        public void setPackageVersion(string packageVersion)
+        {
+            this.packageVersion = packageVersion;
         }
 
         private void Start()
@@ -44,21 +62,13 @@ namespace Org.Kevoree.Core.Bootstrap
 
         private void Init()
         {
-            // Use RegistrationBuilder to set up our MEF parts.
-            var regBuilder = new RegistrationBuilder();
-            regBuilder.ForTypesDerivedFrom<DeployUnit>().Export<DeployUnit>();
-
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof(NodeRunner).Assembly, regBuilder));
-            directoryCatalog = new DirectoryCatalog(pluginPath, regBuilder);
-            catalog.Catalogs.Add(directoryCatalog);
-
-            container = new CompositionContainer(catalog);
-            container.ComposeExportedValue(container);
-
-            // Get our exports available to the rest of Program.
-            var laliste = container.GetExportedValues<DeployUnit>();
-            component = laliste.First();
+            var targetPath = Path.Combine(this.pluginPath, packageName + "." + packageVersion);
+            var plugDir = new FileInfo(targetPath).Directory;
+            var catalogs = plugDir.GetDirectories("*", SearchOption.AllDirectories).Select(x => new DirectoryCatalog(x.FullName));
+            var directoryAggregate = new AggregateCatalog(catalogs);
+            _container = new CompositionContainer(directoryAggregate);
+            _container.ComposeParts(this);
+            this.component = exports.First();
         }
 
         public bool Run()
