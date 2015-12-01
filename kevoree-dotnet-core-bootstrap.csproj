@@ -42,7 +42,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Core.Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\org-kevoree-api.1.7.0\lib\net40\Core.Api.dll</HintPath>
+      <HintPath>packages\org-kevoree-api.1.8.0\lib\net40\Core.Api.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
@@ -169,8 +169,8 @@
       <HintPath>packages\Org.Kevoree.Core.KevScript.5.2.23\lib\KevScript.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Log, Version=1.0.5781.19940, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\org-kevoree-log.1.2.0\lib\net45\Log.dll</HintPath>
+    <Reference Include="Log, Version=1.0.5813.30745, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\org-kevoree-log.1.2.1\lib\net45\Log.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

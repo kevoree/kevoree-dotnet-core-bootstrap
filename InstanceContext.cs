@@ -4,30 +4,30 @@ namespace Org.Kevoree.Core.Bootstrap
 {
     internal class InstanceContext : Context
     {
-        private readonly string instanceName;
-        private readonly string nodeName;
-        private readonly string path;
+        private readonly string _instanceName;
+        private readonly string _nodeName;
+        private readonly string _path;
 
         public InstanceContext(string path, string nodeName, string instanceName)
         {
-            this.path = path;
-            this.nodeName = nodeName;
-            this.instanceName = instanceName;
+            _path = path;
+            _nodeName = nodeName;
+            _instanceName = instanceName;
         }
 
         public string getPath()
         {
-            return path;
+            return _path;
         }
 
         public string getNodeName()
         {
-            return nodeName;
+            return _nodeName;
         }
 
         public string getInstanceName()
         {
-            return instanceName;
+            return _instanceName;
         }
     }
 }

@@ -1,74 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Registration;
+using System.IO;
 using System.Linq;
 using Org.Kevoree.Annotation;
 using Org.Kevoree.Core.Api;
-using Org.Kevoree.Core.Api.Adaptation;
-using Org.Kevoree.Core.Api.Command;
 using Org.Kevoree.Core.Api.IMarshalled;
 using Org.Kevoree.Library.Annotation;
-using NodeType = Org.Kevoree.Core.Api.NodeType;
-using Org.Kevoree.Log.Api;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     public class ComponentRunner : MarshalByRefObject, IComponentRunner
     {
 
-        protected readonly AnnotationHelper annotationHelpler = new AnnotationHelper();
-        protected readonly KevoreeInjector<KevoreeInject> injector = new KevoreeInjector<KevoreeInject>();
-        protected readonly KevoreeInjector<Param> injectorParams = new KevoreeInjector<Param>();
-        protected readonly KevoreeInjector<Output> injectorOutputs = new KevoreeInjector<Output>();
-        protected readonly KevoreeInjector<Input> injectorInputs = new KevoreeInjector<Input>();
-        protected readonly KevoreeInjector<Dispatch> injectorDispatchs = new KevoreeInjector<Dispatch>();
+        protected readonly AnnotationHelper AnnotationHelpler = new AnnotationHelper();
+        protected readonly KevoreeInjector<KevoreeInject> Injector = new KevoreeInjector<KevoreeInject>();
+        protected readonly KevoreeInjector<Param> InjectorParams = new KevoreeInjector<Param>();
+        protected readonly KevoreeInjector<Output> InjectorOutputs = new KevoreeInjector<Output>();
+        protected readonly KevoreeInjector<Input> InjectorInputs = new KevoreeInjector<Input>();
+        protected readonly KevoreeInjector<Dispatch> InjectorDispatchs = new KevoreeInjector<Dispatch>();
         private CompositionContainer _container;
-        private DeployUnit component;
+        private DeployUnit _component;
 
-        [ImportMany(typeof(Org.Kevoree.Annotation.DeployUnit))]
-        private HashSet<Org.Kevoree.Annotation.DeployUnit> exports;
+        [ImportMany(typeof(DeployUnit))]
+        private HashSet<DeployUnit> _exports;
 
-        private string pluginPath;
-        private string packageName;
-        private string packageVersion;
+        private string _pluginPath;
+        private string _packageName;
+        private string _packageVersion;
 
         public void setPluginPath(string pluginPath)
         {
-            this.pluginPath = pluginPath;
+            _pluginPath = pluginPath;
         }
 
         public void setPackageName(string packageName)
         {
-            this.packageName = packageName;
+            _packageName = packageName;
         }
 
         public void setPackageVersion(string packageVersion)
         {
-            this.packageVersion = packageVersion;
+            _packageVersion = packageVersion;
         }
 
         private void Start()
         {
-            var startsMethods = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof(Start));
-            if (startsMethods.Count() > 0)
+            var startsMethods = AnnotationHelpler.filterMethodsByAttribute(_component.GetType(), typeof(Start));
+            if (startsMethods.Any())
             {
                 var startMethod = startsMethods.First();
-                startMethod.Invoke(component, null);
+                startMethod.Invoke(_component, null);
             }
         }
 
         private void Init()
         {
-            var targetPath = Path.Combine(this.pluginPath, packageName + "." + packageVersion);
+            var targetPath = Path.Combine(_pluginPath, _packageName + "." + _packageVersion);
             var plugDir = new FileInfo(targetPath).Directory;
             var catalogs = plugDir.GetDirectories("*", SearchOption.AllDirectories).Select(x => new DirectoryCatalog(x.FullName));
             var directoryAggregate = new AggregateCatalog(catalogs);
             _container = new CompositionContainer(directoryAggregate);
             _container.ComposeParts(this);
-            this.component = exports.First();
+            _component = _exports.First();
         }
 
         public bool Run()
@@ -79,11 +74,11 @@ namespace Org.Kevoree.Core.Bootstrap
 
         public bool Stop()
         {
-            var startMethods = annotationHelpler.filterMethodsByAttribute(component.GetType(), typeof(Stop));
-            if (startMethods.Count() > 0)
+            var startMethods = AnnotationHelpler.filterMethodsByAttribute(_component.GetType(), typeof(Stop));
+            if (startMethods.Any())
             {
                 var startMethod = startMethods.First();
-                startMethod.Invoke(component, null);
+                startMethod.Invoke(_component, null);
             }
             return true;
         }
@@ -91,53 +86,53 @@ namespace Org.Kevoree.Core.Bootstrap
         internal void ProceedInject(string path, string nodeName, string name, KevoreeCoreBean core)
         {
             Init();
-            injector.inject<Context>(component, new InstanceContext(path, nodeName, name));
-            injector.inject<ModelService>(component, new ContextAwareAdapter(core, path));
-            injector.inject<ILogger>(component, core.getLogger().getInstance(nodeName, name));
-            injector.inject(component, core.getBootstrapService());
+            Injector.inject<Context>(_component, new InstanceContext(path, nodeName, name));
+            Injector.inject<ModelService>(_component, new ContextAwareAdapter(core, path));
+            Injector.inject(_component, core.getLogger().getInstance(nodeName, name));
+            Injector.inject(_component, core.getBootstrapService());
         }
 
         public bool updateDictionary(IDictionaryAttributeMarshalled attribute, IValueMarshalled value)
         {
-            injectorParams.smartInject<Param>(component, attribute.getName(), attribute.getDatatype(), value.getValue());
+            InjectorParams.smartInject<Param>(_component, attribute.getName(), attribute.getDatatype(), value.getValue());
             return true;
         }
 
         public void attachOutputPort(Port port, string fieldName)
         {
-            injectorOutputs.injectByName(component, port, fieldName);
+            InjectorOutputs.injectByName(_component, port, fieldName);
         }
 
         public void sendThroughInputPort(string fieldName, string value)
         {
-            injectorInputs.callByName(component, fieldName, value);
+            InjectorInputs.callByName(_component, fieldName, value);
         }
 
         public void dispatch(string payload, Callback callback)
         {
-            injectorDispatchs.call(component, payload);
+            InjectorDispatchs.call(_component, payload);
         }
 
         public void attachInputPort(Port port)
         {
             // component must be a channel
-            ((ChannelPort)component).addInputPort(port);
+            (_component as ChannelPort).addInputPort(port);
         }
 
         public void attachRemoteInputPort(Port port)
         {
             // component must be a channel
-            ((ChannelPort)component).addRemoteInputPort(port);
+            (_component as ChannelPort).addRemoteInputPort(port);
         }
 
         public void detachInputPort(Port port)
         {
-            ((ChannelPort)component).removeInputPort(port);
+            (_component as ChannelPort).removeInputPort(port);
         }
 
         public void detachRemoteInputPort(Port port)
         {
-            ((ChannelPort)component).removeRemoteInputPort(port);
+            (_component as ChannelPort).removeRemoteInputPort(port);
         }
     }
 }

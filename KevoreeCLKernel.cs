@@ -1,28 +1,23 @@
 ﻿using System;
 using System.Linq;
-using org.kevoree;
-using org.kevoree.impl;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Api.IMarshalled;
-using Boolean = java.lang.Boolean;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     public class KevoreeCLKernel : MarshalByRefObject, BootstrapService
     {
-        private readonly string nodeName;
-        private readonly string nugetLocalRepositoryPath;
-        private readonly string nugetRepositoryUrl;
-        private Bootstrap bootstrap;
-        private KevoreeCoreBean core;
+        private readonly string _nodeName;
+        private readonly string _nugetLocalRepositoryPath;
+        private readonly string _nugetRepositoryUrl;
+        private KevoreeCoreBean _core;
 
-        public KevoreeCLKernel(Bootstrap bootstrap, string nodeName, string nugetLocalRepositoryPath,
+        public KevoreeCLKernel(string nodeName, string nugetLocalRepositoryPath,
             string nugetRepositoryUrl)
         {
-            this.bootstrap = bootstrap;
-            this.nodeName = nodeName;
-            this.nugetLocalRepositoryPath = nugetLocalRepositoryPath;
-            this.nugetRepositoryUrl = nugetRepositoryUrl;
+            _nodeName = nodeName;
+            _nugetLocalRepositoryPath = nugetLocalRepositoryPath;
+            _nugetRepositoryUrl = nugetRepositoryUrl;
         }
 
         /**
@@ -32,35 +27,27 @@ namespace Org.Kevoree.Core.Bootstrap
         public INodeRunner createInstance(IContainerNodeMarshalled nodeInstance)
         {
             var typedef = nodeInstance.getTypeDefinition();
-            // FIXME : look badly complex for just a DU look (we are looking for the DU of dotnet).
-            var deployUnitDotNet =
-                ((IDeployUnitMarshalled)
-                    typedef.getDeployUnits()
-                        .Where(x => x.findFiltersByID("platform").getValue() == "dotnet")
-                        .First());
+            var deployUnitDotNet = typedef.getDeployUnits().First(x => x.findFiltersByID("platform").getValue() == "dotnet");
             var name = deployUnitDotNet.getName();
             var version = deployUnitDotNet.getVersion();
-            var instance = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, nugetRepositoryUrl);
-            // TODO : ici injecter les @KevoreeInject dans l'instance
-            //var coreProxy = new ContextAwareModelServiceCoreProxy();
-            instance.proceedInject(nodeInstance.path(), nodeName, nodeInstance.getName(), core);
-
+            var instance = new NugetLoader.NugetLoader(_nugetLocalRepositoryPath).LoadRunnerFromPackage<NodeRunner>(name, version, _nugetRepositoryUrl);
+            instance.ProceedInject(nodeInstance.path(), _nodeName, nodeInstance.getName(), _core);
 
             return instance;
         }
 
         public IComponentRunner LoadSomething(string name, string version, string path)
         {
-            ComponentRunner ret = new NugetLoader.NugetLoader(nugetLocalRepositoryPath).LoadRunnerFromPackage<ComponentRunner>(
-                       name, version, nugetRepositoryUrl);
-            ret.ProceedInject(path, nodeName, name, core);
+            ComponentRunner ret = new NugetLoader.NugetLoader(_nugetLocalRepositoryPath).LoadRunnerFromPackage<ComponentRunner>(
+                       name, version, _nugetRepositoryUrl);
+            ret.ProceedInject(path, _nodeName, name, _core);
             return ret;
         }
 
 
-        public void setCore(KevoreeCoreBean core)
+        public void SetCore(KevoreeCoreBean core)
         {
-            this.core = core;
+            _core = core;
         }
 
     }

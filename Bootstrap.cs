@@ -1,41 +1,36 @@
 ﻿using System;
-using System.Text;
 using java.io;
 using org.kevoree;
 using org.kevoree.kevscript;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Marshalled;
-using Org.Kevoree.Core.Microkernel;
-using Console = System.Console;
-using Parser = CommandLine.Parser;
 using Org.Kevoree.Log.Api;
+using Console = System.Console;
+using File = System.IO.File;
+using Parser = CommandLine.Parser;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
     public class Bootstrap
     {
-        private static readonly KevoreeCoreBean core = new KevoreeCoreBean();
-        public KevoreeCLKernel kernel;
-        private readonly KevScriptEngine kevScriptEngine = new KevScriptEngine();
-        private KevoreeKernel microkernel;
+        private static readonly KevoreeCoreBean Core = new KevoreeCoreBean();
+        public KevoreeCLKernel Kernel;
+        private readonly KevScriptEngine _kevScriptEngine = new KevScriptEngine();
 
 
-        public Bootstrap(KevoreeKernel k, string nodeName, string kevoreeRegistryUrl, string nugetLocalRepositoryPath,
+        public Bootstrap(string nodeName, string kevoreeRegistryUrl, string nugetLocalRepositoryPath,
             string nugetRepositoryUrl, Level logLevel)
         {
-            //xmiLoader = core.getFactory().createXMILoader();
-            microkernel = k;
-            kernel = new KevoreeCLKernel(this, nodeName, nugetLocalRepositoryPath, nugetRepositoryUrl);
-
+            Kernel = new KevoreeCLKernel(nodeName, nugetLocalRepositoryPath, nugetRepositoryUrl);
 
             /* WARNING : Really hacky*/
             java.lang.System.setProperty("kevoree.registry", kevoreeRegistryUrl);
 
-            core.setNodeName(nodeName);
-            core.initLog(logLevel);
-            kernel.setCore(core);
-            core.setBootstrapService(kernel);
-            core.start();
+            Core.setNodeName(nodeName);
+            Core.initLog(logLevel);
+            Kernel.SetCore(Core);
+            Core.setBootstrapService(Kernel);
+            Core.start();
         }
 
         private static void Main(string[] args)
@@ -46,7 +41,7 @@ namespace Org.Kevoree.Core.Bootstrap
             {
                 try
                 {
-                    var boot = new Bootstrap(KevoreeKernel.Self.Value, options.NodeName, options.KevoreeRegistryUrl,
+                    var boot = new Bootstrap(options.NodeName, options.KevoreeRegistryUrl,
                         options.NugetLocalRepositoryPath, options.NugetRepositoryUrl, Level.Debug);
                     if (options.ScriptPath == null)
                     {
@@ -59,19 +54,19 @@ namespace Org.Kevoree.Core.Bootstrap
                         var defaultKevScript = string.Format(@"add {0} : DotnetNode
 add sync : WSGroup
 attach {0} sync", options.NodeName);
-                        boot.LoadKevScript(defaultKevScript, x => core.getLogger().Warn("Bootstrap completed"));
+                        boot.LoadKevScript(defaultKevScript, x => Core.getLogger().Warn("Bootstrap completed"));
                     }
                     else
                     {
                         /*
                          * We try to load scriptPath file and guess it's content by extention (.json for a json model or .kev for a kev script model).
                          */
-                        boot.loadScript(options.ScriptPath);
+                        boot.LoadScript(options.ScriptPath);
                     }
                 }
                 catch (Exception e)
                 {
-                    core.getLogger().Error(e.ToString());
+                    Core.getLogger().Error(e.ToString());
                 }
             }
         }
@@ -79,44 +74,35 @@ attach {0} sync", options.NodeName);
         private void LoadKevScript(string defaultKevScript, UpdateCallback callback)
         {
             var emptyModel = initialModel();
-            core.getFactory().root(emptyModel);
-            InputStream input = new ByteArrayInputStream(Encoding.Unicode.GetBytes(defaultKevScript.ToCharArray()));
-            core.getLogger().Debug(defaultKevScript);
+            Core.getFactory().root(emptyModel);
+            Core.getLogger().Debug(defaultKevScript);
             try
             {
-                kevScriptEngine.execute(defaultKevScript, emptyModel);
+                _kevScriptEngine.execute(defaultKevScript, emptyModel);
             }
             catch (java.lang.Exception e)
             {
                 throw new Exception(e.getMessage());
             }
 
-            var currentNode = emptyModel.findNodesByID(core.getNodeName());
-
-            // TODO : is it really necessary to deal with network issues here ?
-
-            core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
+            Core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
         }
 
-        private void loadScript(string scriptPath)
+        private void LoadScript(string scriptPath)
         {
             if (scriptPath.EndsWith(".json"))
             {
-                // TODO : load a json model
-                var jsonLoader = core.getFactory().createJSONLoader();
+                var jsonLoader = Core.getFactory().createJSONLoader();
                 var model = jsonLoader.loadModelFromStream(new FileInputStream(scriptPath)).get(0);
-                bootstrap((ContainerRoot)model, applied => core.getLogger().Warn(applied.ToString()));
+                bootstrap((ContainerRoot)model, applied => Core.getLogger().Warn(applied.ToString()));
             }
             else if (scriptPath.EndsWith(".kev"))
             {
-
-                var content  = System.IO.File.ReadAllText(scriptPath);
-
-                this.LoadKevScript(content, x => core.getLogger().Warn("Bootstrap completed"));
+                var content  = File.ReadAllText(scriptPath);
+                LoadKevScript(content, x => Core.getLogger().Warn("Bootstrap completed"));
             }
             else
             {
-                // TODO : allowing XMI ?
                 Console.WriteLine("Unknow file extension [{0}]", scriptPath);
             }
         }
@@ -124,15 +110,15 @@ attach {0} sync", options.NodeName);
         private void bootstrap(ContainerRoot model, UpdateCallback callback)
         {
             var emptyModel = initialModel();
-            core.getFactory().root(emptyModel);
-            var compare = core.getFactory().createModelCompare();
+            Core.getFactory().root(emptyModel);
+            var compare = Core.getFactory().createModelCompare();
             compare.merge(emptyModel, model).applyOn(emptyModel);
-            core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
+            Core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
         }
 
         private ContainerRoot initialModel()
         {
-            var emptyModel = core.getFactory().createContainerRoot();
+            var emptyModel = Core.getFactory().createContainerRoot();
             return emptyModel;
         }
     }

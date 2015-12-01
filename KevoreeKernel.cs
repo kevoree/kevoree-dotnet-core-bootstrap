@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Org.Kevoree.Core.Microkernel
+namespace Org.Kevoree.Core.Bootstrap
 {
     public abstract class KevoreeKernel
     {
