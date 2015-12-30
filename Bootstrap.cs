@@ -96,7 +96,7 @@ attach {0} sync", options.NodeName);
                 var model = jsonLoader.loadModelFromStream(new FileInputStream(scriptPath)).get(0);
                 bootstrap((ContainerRoot)model, applied => Core.getLogger().Warn(applied.ToString()));
             }
-            else if (scriptPath.EndsWith(".kev"))
+            else if (scriptPath.EndsWith(".kev") || scriptPath.EndsWith(".kevs"))
             {
                 var content  = File.ReadAllText(scriptPath);
                 LoadKevScript(content, x => Core.getLogger().Warn("Bootstrap completed"));
