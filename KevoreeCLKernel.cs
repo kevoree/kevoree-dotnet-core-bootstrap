@@ -40,7 +40,14 @@ namespace Org.Kevoree.Core.Bootstrap
         {
             ComponentRunner ret = new NugetLoader.NugetLoader(_nugetLocalRepositoryPath).LoadRunnerFromPackage<ComponentRunner>(
                        name, version, _nugetRepositoryUrl);
-            ret.ProceedInject(path, _nodeName, name, _core);
+            if (ret != null)
+            {
+                ret.ProceedInject(path, _nodeName, name, _core);
+            }
+            else
+            {
+                Console.WriteLine("Failed to load a component. name: " + name + "; version: " + version + "; nuget.local.repository.path: " + _nugetLocalRepositoryPath + "; nuget.repository.url: " + _nugetRepositoryUrl);
+            }
             return ret;
         }
 
