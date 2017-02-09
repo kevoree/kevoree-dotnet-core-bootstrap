@@ -1,5 +1,4 @@
 ﻿using System;
-using org.kevoree.pmodeling.api.trace;
 using Org.Kevoree.Core.Api;
 using Org.Kevoree.Core.Api.Handler;
 using Org.Kevoree.Core.Api.IMarshalled;
@@ -7,7 +6,7 @@ using Org.Kevoree.Core.Api.IMarshalled;
 namespace Org.Kevoree.Core.Bootstrap
 {
     internal class ContextAwareAdapter : ModelService
-    {
+    { 
         private readonly string _caller;
         private readonly ContextAwareModelService _service;
 
@@ -62,15 +61,17 @@ namespace Org.Kevoree.Core.Bootstrap
             return _service.getNodeName();
         }
 
+		public void submitSequence(org.kevoree.modeling.api.trace.TraceSequence sequence, Org.Kevoree.Core.Api.UpdateCallback callback)
+		{
+
+			 _service.submitSequence(sequence, callback, _caller);
+		}
 
         public void submitScript(string script, UpdateCallback callback)
         {
             _service.submitScript(script, callback, _caller);
         }
 
-        public void submitSequence(TraceSequence sequence, UpdateCallback callback)
-        {
-            _service.submitSequence(sequence, callback, _caller);
-        }
+     
     }
 }

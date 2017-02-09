@@ -8,6 +8,7 @@ using Org.Kevoree.Log.Api;
 using Console = System.Console;
 using File = System.IO.File;
 using Parser = CommandLine.Parser;
+using java.lang;
 
 namespace Org.Kevoree.Core.Bootstrap
 {
@@ -15,7 +16,7 @@ namespace Org.Kevoree.Core.Bootstrap
     {
         private static readonly KevoreeCoreBean Core = new KevoreeCoreBean();
         public KevoreeCLKernel Kernel;
-        private readonly KevScriptEngine _kevScriptEngine = new KevScriptEngine();
+        private readonly KevScriptEngine _kevScriptEngine = new KevScriptEngine("http://registry.kevoree.org");
 
 
         public Bootstrap(string nodeName, string kevoreeRegistryUrl, string nugetLocalRepositoryPath,
@@ -51,8 +52,8 @@ namespace Org.Kevoree.Core.Bootstrap
                          * The Dotnet Node name is "nodeName".
                          * The WSGroup listen on port 9000.
                          */
-                        var defaultKevScript = string.Format(@"add {0} : DotnetNode
-add sync : WSGroup
+                        var defaultKevScript = string.Format(@"add {0} : DotnetNode/Latest/Latest
+add sync : WSGroup/Latest/Latest
 attach {0} sync", options.NodeName);
                         boot.LoadKevScript(defaultKevScript, x => Core.getLogger().Warn("Bootstrap completed"));
                     }
@@ -64,7 +65,7 @@ attach {0} sync", options.NodeName);
                         boot.LoadScript(options.ScriptPath);
                     }
                 }
-                catch (Exception e)
+                catch (java.lang.Exception e)
                 {
                     Core.getLogger().Error(e.ToString());
                 }
@@ -78,14 +79,15 @@ attach {0} sync", options.NodeName);
             Core.getLogger().Debug(defaultKevScript);
             try
             {
+				//Console.WriteLine(defaultKevScript);
                 _kevScriptEngine.execute(defaultKevScript, emptyModel);
             }
             catch (java.lang.Exception e)
             {
-                throw new Exception(e.getMessage());
+                throw new System.Exception(e.getMessage());
             }
 
-            Core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
+			Core.update(new ContainerRootMarshalled(emptyModel), callback, "/");
         }
 
         private void LoadScript(string scriptPath)
