@@ -52,9 +52,9 @@ namespace Org.Kevoree.Core.Bootstrap
                          * The Dotnet Node name is "nodeName".
                          * The WSGroup listen on port 9000.
                          */
-                        var defaultKevScript = string.Format(@"add {0} : DotnetNode/LATEST/LATEST
-add sync : WSGroup/LATEST/LATEST
-attach {0} sync", options.NodeName);
+                        var defaultKevScript = string.Format(@"add {0} : dotnetNode/1/LATEST"
+/*add sync : WSGroup/1/LATEST
+attach {0} sync"*/, options.NodeName);
                         boot.LoadKevScript(defaultKevScript, x => Core.getLogger().Warn("Bootstrap completed"));
                     }
                     else
@@ -80,6 +80,7 @@ attach {0} sync", options.NodeName);
             try
             {
 				//Console.WriteLine(defaultKevScript);
+
                 _kevScriptEngine.execute(defaultKevScript, emptyModel);
             }
             catch (java.lang.Exception e)
@@ -120,8 +121,16 @@ attach {0} sync", options.NodeName);
 
         private ContainerRoot initialModel()
         {
-            var emptyModel = Core.getFactory().createContainerRoot();
-            return emptyModel;
+            //var emptyModel = Core.getFactory().createContainerRoot();
+			//var nodeType = Core.getFactory().createTypeDefinition();
+
+			var loader = Core.getFactory().createJSONLoader();
+			ContainerRoot context = (ContainerRoot)loader.loadModelFromString("\t{\n    \"class\": \"root:org.kevoree.ContainerRoot@0\",\n    \"generated_KMF_ID\": \"0\",\n    \"nodes\": [],\n    \"repositories\": [],\n    \"hubs\": [],\n    \"mBindings\": [],\n    \"groups\": [],\n    \"packages\": [\n        {\n            \"class\": \"org.kevoree.Package@kevoree\",\n            \"name\": \"kevoree\",\n            \"packages\": [],\n            \"typeDefinitions\": [\n                {\n                    \"class\": \"org.kevoree.NodeType@name=dotnetNode,version=1\",\n                    \"abstract\": \"false\",\n                    \"name\": \"dotnetNode\",\n                    \"version\": \"1\",\n                    \"deployUnits\": [\n                        \"/packages[kevoree]/deployUnits[hashcode=be81e0d765d1e6c27207e8882cc6d7b3,name=org.kevoree.library.dotnet.dotnetNode,version=5.4.0]\"\n                    ],\n                    \"superTypes\": [],\n                    \"dictionaryType\": [\n                        {\n                            \"class\": \"org.kevoree.DictionaryType@0.0\",\n                            \"generated_KMF_ID\": \"0.0\",\n                            \"attributes\": [\n                                {\n                                    \"class\": \"org.kevoree.DictionaryAttribute@jvmArgs\",\n                                    \"fragmentDependant\": \"false\",\n                                    \"optional\": \"true\",\n                                    \"name\": \"jvmArgs\",\n                                    \"state\": \"false\",\n                                    \"datatype\": \"STRING\",\n                                    \"defaultValue\": \"\",\n                                    \"genericTypes\": []\n                                },\n                                {\n                                    \"class\": \"org.kevoree.DictionaryAttribute@log\",\n                                    \"fragmentDependant\": \"false\",\n                                    \"optional\": \"true\",\n                                    \"name\": \"log\",\n                                    \"state\": \"false\",\n                                    \"datatype\": \"STRING\",\n                                    \"defaultValue\": \"INFO\",\n                                    \"genericTypes\": []\n                                }\n                            ]\n                        }\n                    ],\n                    \"metaData\": []\n                }\n            ],\n            \"deployUnits\": [\n                {\n                    \"class\": \"org.kevoree.DeployUnit@hashcode=be81e0d765d1e6c27207e8882cc6d7b3,name=org.kevoree.library.dotnet.dotnetNode,version=5.4.0\",\n                    \"name\": \"org.kevoree.library.dotnet.dotnetNode\",\n                    \"hashcode\": \"be81e0d765d1e6c27207e8882cc6d7b3\",\n                    \"url\": \"org.kevoree.library.dotnet:org.kevoree.library.dotnet.dotnetNode:5.4.0\",\n                    \"version\": \"5.4.0\",\n                    \"requiredLibs\": [],\n                    \"filters\": [\n                        {\n                            \"class\": \"org.kevoree.Value@platform\",\n                            \"name\": \"platform\",\n                            \"value\": \"dotnet\"\n                        },\n                        {\n                            \"class\": \"org.kevoree.Value@repo_kevoree-oss\",\n                            \"name\": \"repo_kevoree-oss\",\n                            \"value\": \"https://www.nuget.org/\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ]\n}").get(0);
+			Console.WriteLine(""+context.getNodes().size());
+			//nodeType.setName("DotnetNode");
+			//nodeType.setVersion(1);
+
+			return context;
         }
     }
 }
