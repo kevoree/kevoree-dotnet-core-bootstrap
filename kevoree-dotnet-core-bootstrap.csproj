@@ -60,23 +60,23 @@
     <Reference Include="Annotation">
       <HintPath>packages\org-kevoree-annotation.5.4.0\lib\net45\Annotation.dll</HintPath>
     </Reference>
-    <Reference Include="KevoreeModel">
-      <HintPath>packages\Org.Kevoree.Core.Model.5.4.7\lib\KevoreeModel.dll</HintPath>
-    </Reference>
-    <Reference Include="KevScript">
-      <HintPath>packages\Org.Kevoree.Core.KevScript.5.4.2\lib\KevScript.dll</HintPath>
-    </Reference>
     <Reference Include="Log">
       <HintPath>packages\org-kevoree-log.1.2.2\lib\net45\Log.dll</HintPath>
     </Reference>
-    <Reference Include="kevoree-dotnet-nuget-loader">
-      <HintPath>packages\Org.Kevoree.Nuget.Loader.5.4.0\lib\net45\kevoree-dotnet-nuget-loader.dll</HintPath>
-    </Reference>
-    <Reference Include="kevoree-dotnet-core">
-      <HintPath>packages\Org.Kevoree.Core.5.4.1\lib\net40\kevoree-dotnet-core.dll</HintPath>
+    <Reference Include="KevoreeModel">
+      <HintPath>packages\Org.Kevoree.Core.Model.5.4.9\lib\KevoreeModel.dll</HintPath>
     </Reference>
     <Reference Include="Core.Api">
-      <HintPath>packages\org-kevoree-api.5.4.3\lib\net45\Core.Api.dll</HintPath>
+      <HintPath>packages\org-kevoree-api.5.4.4\lib\net45\Core.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="kevoree-dotnet-core">
+      <HintPath>packages\Org.Kevoree.Core.5.4.2\lib\net45\kevoree-dotnet-core.dll</HintPath>
+    </Reference>
+    <Reference Include="KevScript">
+      <HintPath>packages\Org.Kevoree.Core.KevScript.5.4.4\lib\KevScript.dll</HintPath>
+    </Reference>
+    <Reference Include="kevoree-dotnet-nuget-loader">
+      <HintPath>packages\Org.Kevoree.Nuget.Loader.5.4.1\lib\net45\kevoree-dotnet-nuget-loader.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

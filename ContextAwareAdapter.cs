@@ -61,7 +61,7 @@ namespace Org.Kevoree.Core.Bootstrap
             return _service.getNodeName();
         }
 
-		public void submitSequence(org.kevoree.modeling.api.trace.TraceSequence sequence, Org.Kevoree.Core.Api.UpdateCallback callback)
+		public void submitSequence(org.kevoree.pmodeling.api.trace.TraceSequence sequence, Org.Kevoree.Core.Api.UpdateCallback callback)
 		{
 
 			 _service.submitSequence(sequence, callback, _caller);

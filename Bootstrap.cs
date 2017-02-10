@@ -52,8 +52,8 @@ namespace Org.Kevoree.Core.Bootstrap
                          * The Dotnet Node name is "nodeName".
                          * The WSGroup listen on port 9000.
                          */
-                        var defaultKevScript = string.Format(@"add {0} : DotnetNode/Latest/Latest
-add sync : WSGroup/Latest/Latest
+                        var defaultKevScript = string.Format(@"add {0} : DotnetNode/LATEST/LATEST
+add sync : WSGroup/LATEST/LATEST
 attach {0} sync", options.NodeName);
                         boot.LoadKevScript(defaultKevScript, x => Core.getLogger().Warn("Bootstrap completed"));
                     }
